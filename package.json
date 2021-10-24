@@ -4,6 +4,7 @@
   "version": "0.0.1",
   "description": "AWS Lambda Framework",
   "scripts": {
+    "prepare": "husky install",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "build": "tsc"

@@ -12,11 +12,6 @@ export interface HttpApiHandlerRequest extends HandlerRequest{
     headers: any
 }
 
-
-
-
-
-
 export abstract class AbstractHttpApiHandler implements HandlerInterface {
     public handlerType =  HandlerType.httpApi
     options : HttpApiHandlerOptions
