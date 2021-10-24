@@ -6,6 +6,7 @@ export * from "./HttpApiResolver"
 export class HandlerResolver {
 
     protected handlerClasses : any[] = []
+
     constructor (handlers: any[]) {
         this.handlerClasses = handlers
     }
@@ -17,8 +18,9 @@ export class HandlerResolver {
         const httpApiEventResolver: HttpApiEventResolver = new HttpApiEventResolver(event,context)
 
 
-        for (const handlerClass of this.handlerClasses) {
-            const handler = new handlerClass(event, context)
+        for (const HandlerClass of this.handlerClasses) {
+
+            const handler = new HandlerClass(event, context)
             const resolverOptions = handler.options.resolver
 
             console.log('handler.options',resolverOptions)

@@ -17,7 +17,7 @@ export class HttpApiEventResolver {
 
     public resolve (handlerResolverOptions: HttpApiHandlerResolverOptions): boolean {
 
-        if (this.event.routeKey != 'ANY /{proxy+}') {
+        if (this.event.routeKey !== 'ANY /{proxy+}') {
             return false
         }
         if (this.event.requestContext.http.method.toLowerCase() !== handlerResolverOptions.method.toLowerCase()) {

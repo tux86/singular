@@ -5,6 +5,7 @@ export class Singular {
     constructor (handlers:  any[]) {
         this.resolver = new HandlerResolver(handlers)
     }
+
     public async handler (event, context) : Promise<any>{
         const {handler, request} = this.resolver.resolve(event,context)
 
