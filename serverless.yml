@@ -1,0 +1,32 @@
+service: singular-lambda-demo
+frameworkVersion: '2'
+useDotenv: true
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    host: 0.0.0.0
+    useChildProcesses: true
+    printOutput: false
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region:  eu-west-1
+  profile: non-prod
+  lambdaHashingVersion: 20201221
+
+
+functions:
+  httpApiExample:
+    handler: src/baseHander.handler
+    events:
+      - httpApi:
+          path: /
+          method: "*"
+      - httpApi:
+          path: /{proxy+}
+          method: "*"
