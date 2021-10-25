@@ -1,9 +1,9 @@
-import {HandlerResolver} from "@/singular/resolver";
+import {Resolver} from "@/singular/resolver";
 
 export class Singular {
-    protected resolver : HandlerResolver
+    protected resolver : Resolver
     constructor (handlers:  any[]) {
-        this.resolver = new HandlerResolver(handlers)
+        this.resolver = new Resolver(handlers)
     }
 
     public async handler (event, context) : Promise<any>{

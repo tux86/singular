@@ -6,7 +6,7 @@ import {AbstractHttpApiHandler, HttpApiHandler, HttpApiHandlerRequest} from "@/s
         path: '/user/:userId'
     }
 })
-export class GetUserHandler extends AbstractHttpApiHandler {
+export class GetUserHttpHandler extends AbstractHttpApiHandler {
 
     async handler (request: HttpApiHandlerRequest): Promise<any> {
         return {

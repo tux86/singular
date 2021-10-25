@@ -3,6 +3,8 @@ frameworkVersion: '2'
 useDotenv: true
 
 plugins:
+  - serverless-appsync-plugin
+  - serverless-appsync-simulator
   - serverless-plugin-typescript
   - serverless-offline
 
@@ -11,6 +13,30 @@ custom:
     host: 0.0.0.0
     useChildProcesses: true
     printOutput: false
+  appsync-simulator:
+    apiKey: da2-fakeApiId123456
+
+  appSync:
+      name: helloworld-graphql
+      authenticationType: API_KEY
+      dataSources:
+        - type: AWS_LAMBDA
+          name: LambdaGraphQLHandler
+          config:
+            functionName: graphqlHandler
+      schema:
+        - AppSync/schema.graphql
+      mappingTemplatesLocation: AppSync/mapping-templates
+      defaultMappingTemplates:
+        request: request.vtl
+        response: response.vtl
+      mappingTemplates:
+        - dataSource: LambdaGraphQLHandler
+          type: Query
+          field: userById
+        - dataSource: LambdaGraphQLHandler
+          type: Mutation
+          field: createUser
 
 provider:
   name: aws
@@ -19,9 +45,8 @@ provider:
   profile: non-prod
   lambdaHashingVersion: 20201221
 
-
 functions:
-  httpApiExample:
+  httpApiHandler:
     handler: src/baseHander.handler
     events:
       - httpApi:
@@ -30,3 +55,6 @@ functions:
       - httpApi:
           path: /{proxy+}
           method: "*"
+
+  graphqlHandler:
+    handler: src/baseHander.handler

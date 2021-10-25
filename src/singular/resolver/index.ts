@@ -1,9 +1,17 @@
 import {HandlerInterface, HandlerRequest, HandlerType} from "@/singular/handler";
-import {HttpApiEventResolver} from "@/singular/resolver/HttpApiResolver";
+import {HttpApiHandlerResolver, AppSyncHandlerResolver} from "@/singular/resolver";
 
-export * from "./HttpApiResolver"
+export * from "./HttpApiHandlerResolver"
+export * from "./AppSyncHandlerResolver"
 
-export class HandlerResolver {
+export interface HandlerResolver {
+     resolve (handler: HandlerInterface): boolean
+     getHandler(): HandlerInterface
+     getHandlerRequest(): HandlerRequest
+}
+
+
+export class Resolver {
 
     protected handlerClasses : any[] = []
 
@@ -11,33 +19,35 @@ export class HandlerResolver {
         this.handlerClasses = handlers
     }
 
+    protected initializeResolvers (event,context) : HandlerResolver[] {
+        return [
+            new HttpApiHandlerResolver(event,context) ,
+            new AppSyncHandlerResolver(event,context)
+        ]
+    }
+
+
     public resolve (event,context) : { handler: HandlerInterface, request: HandlerRequest } {
 
+        console.time('Resolve Duration')
+        console.log(`Resolving handler: Started`)
 
-        console.log(`Resolving handler : total handlers: `, this.handlerClasses.length)
-        const httpApiEventResolver: HttpApiEventResolver = new HttpApiEventResolver(event,context)
-
+        const resolvers = this.initializeResolvers(event,context)
 
         for (const HandlerClass of this.handlerClasses) {
-
-            const handler = new HandlerClass(event, context)
-            const resolverOptions = handler.options.resolver
-
-            console.log('handler.options',resolverOptions)
-            console.log('handler', handler.constructor.name)
-            console.log('handlerType', handler.handlerType)
-
-
-            if (handler.handlerType === HandlerType.httpApi && httpApiEventResolver.resolve(resolverOptions)) {
-                return {
-                    handler,
-                    request: httpApiEventResolver.getHandlerRequest(resolverOptions)
+            const currentHandler = new HandlerClass(event, context)
+            for (const resolver of resolvers) {
+                if (resolver.resolve(currentHandler)) {
+                    console.log(`Resolving handler: Finished`)
+                    console.timeEnd('Resolve Duration')
+                    return {
+                        handler: resolver.getHandler(),
+                        request: resolver.getHandlerRequest()
+                    }
                 }
             }
-
         }
-
-        throw new Error('could not resolve a handler for this request')
+        throw new Error(`could not resolve a handler for this request`)
     }
 
 }

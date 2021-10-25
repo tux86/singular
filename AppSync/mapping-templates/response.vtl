@@ -1,0 +1,14 @@
+#if($ctx.error)
+  $util.error($ctx.error.message, $ctx.error.type, $ctx.result)
+#end
+
+## If the data source invocation is null, we return null.
+#if($util.isNull($ctx.result))
+  #return
+#end
+
+#if( $context.result && $context.result.errorMessage )
+    $utils.error($context.result.errorMessage, $context.result.errorType, $context.result.data)
+#else
+    $util.toJson($ctx.result)
+#end

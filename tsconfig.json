@@ -33,7 +33,6 @@
         "exclude": ["*"]
       }
     ],
-    "outDir": "dist"
   },
   "include": ["src"],
   "exclude": [

@@ -4,7 +4,8 @@ export * from "./HttpApiHandler"
 export interface HandlerRequest {}
 
 export enum HandlerType {
-    httpApi= 'httpApi'
+    httpApi= 'httpApi',
+    appSync= 'appSync'
 }
 
 export interface HandlerInterface {
