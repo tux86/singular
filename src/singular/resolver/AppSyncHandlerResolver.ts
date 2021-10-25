@@ -1,4 +1,4 @@
-import {AppSyncHandlerRequest} from "@/singular/handler/AppSyncHandler";
+import {AppSyncHandlerPayload} from "@/singular/handler/AppSyncHandler";
 import {HandlerInterface, HandlerType} from "@/singular/handler";
 import {HandlerResolver} from "@/singular/resolver/index";
 
@@ -19,11 +19,10 @@ export class AppSyncHandlerResolver implements  HandlerResolver {
 
     public resolve (handler: HandlerInterface): boolean {
 
-
-
         if (handler.handlerType !== HandlerType.appSync) {
             return false
         }
+
         const parentTypeName  = this.event.info?.parentTypeName|| null
         const fieldName  = this.event.info?.fieldName|| null
 
@@ -31,11 +30,11 @@ export class AppSyncHandlerResolver implements  HandlerResolver {
             return false
         }
 
-        if (parentTypeName !== handler.options.resolver.parentTypeName) {
+        if (parentTypeName !== handler.options.resolverOptions.parentTypeName) {
             return false
         }
 
-        if (fieldName !== handler.options.resolver.fieldName) {
+        if (fieldName !== handler.options.resolverOptions.fieldName) {
             return false
         }
 
@@ -49,11 +48,14 @@ export class AppSyncHandlerResolver implements  HandlerResolver {
     }
 
 
-    public getHandlerRequest () : AppSyncHandlerRequest {
+    public getHandlerRequest () : AppSyncHandlerPayload {
         return {
-            arguments: this.event.arguments,
-            selectionSetList: this.event.info.selectionSetList || null,
-            headers: this.event.request.headers
+            body: {
+                arguments: this.event.arguments,
+                selectionSetList: this.event.info.selectionSetList || null,
+                headers: this.event.request.headers
+            },
+            context: {}
         }
     }
 }

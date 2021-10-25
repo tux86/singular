@@ -1,16 +1,20 @@
-import {AbstractAppSyncHandler, AppSyncHandler, AppSyncHandlerRequest} from "@/singular/handler/AppSyncHandler";
+import {
+    AbstractAppSyncHandler,
+    AppSyncHandler,
+    AppSyncHandlerPayload,
+} from "@/singular/handler/AppSyncHandler";
 
 @AppSyncHandler({
-    resolver: {
+    resolverOptions: {
         parentTypeName: 'Query',
-        fieldName: 'userById'
+        fieldName: 'userById',
     }
 })
 export class GetUserGraphqlHandler extends AbstractAppSyncHandler {
 
-    async handler (request: AppSyncHandlerRequest): Promise<any> {
+    async handler (payload: AppSyncHandlerPayload): Promise<any> {
 
-        console.log(request)
+        console.log(payload)
         return {
             userId: '123',
             email: 'user@example.com'

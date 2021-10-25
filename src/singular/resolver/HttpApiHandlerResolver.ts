@@ -1,5 +1,5 @@
 import {match} from "node-match-path";
-import {HandlerInterface, HandlerType, HttpApiHandlerRequest} from "@/singular/handler";
+import {HandlerInterface, HandlerType, HttpApiHandlerPayload} from "@/singular/handler";
 import {HandlerResolver} from "@/singular/resolver/index";
 
 export interface HttpApiHandlerResolverOptions {
@@ -30,10 +30,10 @@ export class HttpApiHandlerResolver implements  HandlerResolver {
         if (this.event.routeKey !== 'ANY /{proxy+}') {
             return false
         }
-        if (this.event.requestContext.http.method.toLowerCase() !== handler.options.resolver.method.toLowerCase()) {
+        if (this.event.requestContext.http.method.toLowerCase() !== handler.options.resolverOptions.method.toLowerCase()) {
             return false
         }
-        const {matches} = match(handler.options.resolver.path, this.event.rawPath);
+        const {matches} = match(handler.options.resolverOptions.path, this.event.rawPath);
 
         if (!matches) {
             return false
@@ -48,12 +48,15 @@ export class HttpApiHandlerResolver implements  HandlerResolver {
         return  this.handler
     }
 
-    public getHandlerRequest () : HttpApiHandlerRequest {
-        const res = match(this.handler.options.resolver.path,this.event.rawPath)
+    public getHandlerRequest () : HttpApiHandlerPayload {
+        const res = match(this.handler.options.resolverOptions.path,this.event.rawPath)
         return {
-            pathParameters: res.params,
-            queryParameters: this.event.queryStringParameters,
-            headers: this.event.headers
+            body: {
+                pathParameters: res.params,
+                queryParameters: this.event.queryStringParameters,
+                headers: this.event.headers
+            },
+            context: {}
         }
     }
 }

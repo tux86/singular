@@ -1,15 +1,18 @@
-import { HandlerInterface, HandlerRequest, HandlerType } from '@/singular/handler/index'
+import {HandlerInterface, HandlerType, HandlerPayload} from '@/singular/handler/index'
 import { AppSyncHandlerResolverOptions } from '@/singular/resolver'
 
 export interface AppSyncHandlerOptions {
-    resolver: AppSyncHandlerResolverOptions
+    resolverOptions: AppSyncHandlerResolverOptions
     middlewares?: any[]
 }
 
-export interface AppSyncHandlerRequest extends HandlerRequest {
-    arguments: any
-    selectionSetList: any
-    headers: any
+export interface AppSyncHandlerPayload extends HandlerPayload {
+    body: {
+        arguments: any
+        selectionSetList: any
+        headers: any
+    }
+    context: any
 }
 
 export abstract class AbstractAppSyncHandler implements HandlerInterface {
@@ -23,7 +26,7 @@ export abstract class AbstractAppSyncHandler implements HandlerInterface {
         this._context = context
     }
 
-    abstract handler(options: AppSyncHandlerRequest): any
+    abstract handler(options: AppSyncHandlerPayload): any
 }
 
 export function AppSyncHandler (options: AppSyncHandlerOptions) {

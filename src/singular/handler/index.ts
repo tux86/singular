@@ -1,7 +1,13 @@
+import {HttpApiHandlerOptions} from "@/singular/handler/HttpApiHandler";
+import {AppSyncHandlerOptions} from "@/singular/handler/AppSyncHandler";
+
 export * from "./HttpApiHandler"
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface HandlerRequest {}
+export interface HandlerPayload {
+    body: any
+    context: any
+}
 
 export enum HandlerType {
     httpApi= 'httpApi',
@@ -12,9 +18,9 @@ export interface HandlerInterface {
     _event : any
     _context : any
     handlerType: HandlerType
-    options : any  // | AppsyncHandlerOptions
+    options : any
 
-    handler(request: HandlerRequest) : any
+    handler(payload: HandlerPayload) : any
 }
 
 

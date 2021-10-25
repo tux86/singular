@@ -1,17 +1,18 @@
-import {AbstractHttpApiHandler, HttpApiHandler, HttpApiHandlerRequest} from "@/singular/handler";
+import {AbstractHttpApiHandler, HttpApiHandler, HttpApiHandlerPayload} from "@/singular/handler";
 
 @HttpApiHandler({
-    resolver: {
+    resolverOptions: {
         method: 'GET',
         path: '/user/:userId'
     }
 })
 export class GetUserHttpHandler extends AbstractHttpApiHandler {
 
-    async handler (request: HttpApiHandlerRequest): Promise<any> {
+    async handler (payload: HttpApiHandlerPayload): Promise<any> {
+
         return {
             statusCode: 200,
-            body: JSON.stringify(request,null,2 ),
+            body: JSON.stringify(payload,null,2 ),
         };
     }
 }

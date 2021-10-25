@@ -1,15 +1,18 @@
-import { HandlerInterface, HandlerRequest, HandlerType } from '@/singular/handler/index'
+import {HandlerInterface, HandlerPayload, HandlerType} from '@/singular/handler/index'
 import { HttpApiHandlerResolverOptions } from '@/singular/resolver'
 
 export interface HttpApiHandlerOptions {
-    resolver: HttpApiHandlerResolverOptions
+    resolverOptions: HttpApiHandlerResolverOptions
     middlewares?: any[]
 }
 
-export interface HttpApiHandlerRequest extends HandlerRequest {
-    pathParameters: any
-    queryParameters: any
-    headers: any
+export interface HttpApiHandlerPayload extends HandlerPayload {
+    body: {
+        pathParameters: any
+        queryParameters: any
+        headers: any
+    },
+    context: any
 }
 
 export abstract class AbstractHttpApiHandler implements HandlerInterface {
@@ -23,7 +26,7 @@ export abstract class AbstractHttpApiHandler implements HandlerInterface {
         this._context = context
     }
 
-    abstract handler(options: HttpApiHandlerRequest): any
+    abstract handler(options: HttpApiHandlerPayload): any
 }
 
 export function HttpApiHandler (options: HttpApiHandlerOptions) {
